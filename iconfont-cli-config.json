@@ -1,8 +1,8 @@
 {
   "js": "//at.alicdn.com/t/c/font_4807277_enrwdyz7swf.js",
-  "framework": "react",
-  "useTaroOrUniApp": false,
-  "iconfontPath": "demo/components/iconfont",
+  "framework": "vue",
+  "mini": false,
+  "iconfontPath": "demo/vue/components/iconfont",
   "achieve": "mask",
   "unit": "px",
   "color": "#000000"

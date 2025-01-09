@@ -4,23 +4,17 @@ import path from 'node:path'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import * as cheerio from 'cheerio'
+import * as ejs from 'ejs'
 import { ensureDir } from 'fs-extra'
 import { achieveOptions, frameworkOptions } from './constants'
 import { fileExists } from './utils'
 
 const cwd = process.cwd()
-console.log(cwd)
-
-// fetch('https://at.alicdn.com/t/c/font_4806885_ei3pp0q0h25.js').then((res) => {
-//   return res.text()
-// }).then((res) => {
-
-// })
 
 interface Config {
   js: string
   framework: 'vue' | 'react'
-  useTaroOrUniApp: unknown
+  mini: boolean
   iconfontPath: string
   achieve: 'mask' | 'backgroundImage'
   unit: string
@@ -49,7 +43,7 @@ async function init() {
             message: '请选择一个框架',
             options: frameworkOptions,
           }),
-          useTaroOrUniApp: ({ results }) => {
+          mini: ({ results }) => {
             return p.confirm({
               message: results.framework === 'react' ? '是否使用tarojs' : '是否使用uniapp',
               initialValue: false,
@@ -101,10 +95,11 @@ async function run(config: Config) {
   const json = await fetch(`https://${config.js}`).then(res => res.text())
   const ic_path = path.resolve(cwd, config.iconfontPath)
   await ensureDir(ic_path)
+  config.iconfontPath = ic_path
   const svgRegex = /<svg[^>]*>([\s\S]*?)<\/svg>/
   const x = json.match(svgRegex)?.[1] ?? ''
   const $ = cheerio.load(`<div>${x}<div/>`)
-  const obj: Record<string, any> = {}
+  const data: Record<string, any> = {}
   const types: string[] = []
   $('symbol').each((index, element) => {
     const id = $(element).attr('id')?.replace('icon-', '') ?? ''
@@ -113,13 +108,57 @@ async function run(config: Config) {
     $(element).attr('height', `1em`)
     $(element).attr('xmlns', `http://www.w3.org/2000/svg`)
     const outerHTML = $(element).prop('outerHTML') ?? ''
-    obj[id] = outerHTML.replace(/symbol/g, 'svg').replace(/viewbox/gi, 'viewBox')
+    data[id] = outerHTML.replace(/symbol/g, 'svg').replace(/viewbox/gi, 'viewBox')
     types.push(id)
   })
-  fs.writeFileSync(
-    path.resolve(ic_path, 'iconfont-data.js'),
-    JSON.stringify(JSON.stringify(obj)),
+  updateIconfontData(data, config)
+  updateIconfontType(types, config)
+  updateIconfontComponent(config)
+}
+
+function updateIconfontData(data: any, { iconfontPath }: Config) {
+  const filename = `iconfont-data.js`
+  const context = ejs.render(
+    fs.readFileSync(path.resolve(__dirname, `../template/${filename}.ejs`), 'utf-8'),
+    {
+      data: decodeURIComponent(JSON.stringify(data, null, 2)),
+    },
   )
+  fs.writeFileSync(
+    path.resolve(iconfontPath, filename),
+    context,
+  )
+}
+
+function updateIconfontType(data: string[], { iconfontPath }: Config) {
+  const filename = `iconfont-types.ts`
+  const context = ejs.render(
+    fs.readFileSync(path.resolve(__dirname, `../template/${filename}.ejs`), 'utf-8'),
+    {
+      data: data.map(e => `"${e}"`).join(' | '),
+    },
+  )
+  fs.writeFileSync(
+    path.resolve(iconfontPath, filename),
+    context,
+  )
+}
+
+function updateIconfontComponent(config: Config) {
+  const ext = config.framework === 'react' ? '.tsx' : '.vue'
+  const componentName = `iconfont${ext}`
+  const filename = `iconfont_${config.framework}_${config.mini ? 'mini' : 'default'}${ext}`
+  const context = ejs.render(
+    fs.readFileSync(path.resolve(__dirname, `../template/${filename}.ejs`), 'utf-8'),
+    {
+      data: config,
+    },
+  )
+  fs.writeFileSync(
+    path.resolve(config.iconfontPath, componentName),
+    context,
+  )
+  console.log(filename)
 }
 
 init()
