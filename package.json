@@ -1,0 +1,39 @@
+{
+  "name": "@zd~/iconfont-cli",
+  "version": "0.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.cjs"
+    }
+  },
+  "main": "index.js",
+  "bin": "./dist/script.js",
+  "files": [
+    "./dist/script.js",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "publish": "npm publish --access public"
+  },
+  "dependencies": {
+    "terser": "^5.37.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^3.12.2",
+    "@eslint-react/eslint-plugin": "^1.23.2",
+    "@types/node": "^22.10.5",
+    "eslint": "^9.17.0",
+    "eslint-plugin-format": "^1.0.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3"
+  }
+}
