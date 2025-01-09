@@ -21,7 +21,7 @@
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
-    "publish": "npm publish --access public",
+    "p": "npm publish --access public",
     "test": "node ./dist/script.js"
   },
   "dependencies": {
