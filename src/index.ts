@@ -81,10 +81,8 @@ async function init() {
       )
       fs.writeFileSync(configFilePath, JSON.stringify(config, null, 2))
     }
-    else {
-      const _config = JSON.parse(fs.readFileSync(configFilePath).toString()) as Config
-      await run(_config)
-    }
+    const _config = JSON.parse(fs.readFileSync(configFilePath).toString()) as Config
+    await run(_config)
   }
   catch (error) {
     console.warn(error)
