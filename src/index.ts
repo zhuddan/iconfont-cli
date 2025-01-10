@@ -8,6 +8,7 @@ import * as ejs from 'ejs'
 import { ensureDir } from 'fs-extra'
 import * as c from 'kolorist'
 import { values } from './args'
+import { banner } from './banner'
 import { frameworkOptions, SVG_BASE64_PERFIX } from './constants'
 import { fileExists, toPascalCase } from './utils'
 
@@ -24,6 +25,7 @@ interface Config {
 
 const configFilePath = path.resolve(cwd, 'iconfont-cli-config.json')
 async function init() {
+  banner()
   try {
     const hasConfig = fileExists(configFilePath)
     if (!hasConfig) {
@@ -184,9 +186,9 @@ function updateIconfontComponent(
 
   if (!showOverwrite) {
     console.log('\n')
-    console.log(c.bgCyan('提示'))
+    console.log(c.bgGray('提示'))
     console.log(
-      c.cyan(`组件 ${componentFilePath} 已存在!\n当前命令只会替换当前组件的"IconfontTypes"的类型声明和其他文件\n如果需要覆盖重新生成请使用 --force 或者 -f 参数\n`),
+      c.gray(`组件 ${componentFilePath} 已存在!\n当前操作只会替换当前组件的"IconfontTypes"的类型声明和其他文件\n如果需要覆盖重新生成请使用 --force 或者 -f 参数\n`),
     )
     if (
       fileExtension === 'js'

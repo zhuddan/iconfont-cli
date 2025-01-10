@@ -19,7 +19,7 @@
 
 ## 如何使用
 
-1. 复制你的Symbol字体图标的在线js链接(确保可以访问)
+1. 复制你的Symbol字体图标的在线js链接(**确保可以访问**)
 
 ![readme.jpg](./.github/readme.jpg)
 
@@ -40,14 +40,14 @@ npx @zd~/iconfont-cli@latest
 
 然后会在你的执行命令的文件夹下生成一个`iconfont-cli-config.json`文件
 
-```
+```json
 {
-  "jsLink": "//at.alicdn.com/t/c/你的链接.js",
-  "framework": "react",
-  "useTs": true,
-  "iconfontPath": "src/components/iconfont",
-  "set": true,
-  "iconPrefix": "icon"
+  "jsLink": "//at.alicdn.com/t/c/你的链接.js", // Symbol字体图标的在线js链接
+  "framework": "react", // 框架
+  "useTs": true, // 是否使用 ts
+  "iconfontPath": "src/components/iconfont", // Iconfont 组件路径文件夹
+  "set": true, // 是否具名导出每一个图标组件 (仅 react 可用)
+  "iconPrefix": "icon" // 具名导出组件的组件前缀 (仅 react 可用)
 }
 ```
 
@@ -153,7 +153,7 @@ export function Iconfont({
 npx @zd~/iconfont-cli@latest
 ```
 
-6. 为了方便是同，你可以把下面命令添加到你的`package.json`
+6. 为了方便使用，你可以把下面命令添加到你的`package.json`
 
 ```json
 {
