@@ -54,15 +54,23 @@ async function init() {
             defaultValue: 'src/components/iconfont',
             placeholder: 'src/components/iconfont',
           }),
-          set: () => p.confirm({
-            message: '是否具名导出每一个图标组件',
-            initialValue: true,
-          }),
-          iconPrefix: () => p.text({
-            message: '具名导出组件的组件前缀',
-            initialValue: 'icon',
-            defaultValue: '',
-          }),
+          set: ({ results }) => {
+            if (results.framework === 'vue')
+              return
+            return p.confirm({
+              message: '是否具名导出每一个图标组件',
+              initialValue: true,
+            })
+          },
+          iconPrefix: ({ results }) => {
+            if (results.framework === 'vue')
+              return
+            return p.text({
+              message: '具名导出组件的组件前缀',
+              initialValue: 'icon',
+              defaultValue: '',
+            })
+          },
         },
         {
           onCancel: () => {
@@ -119,16 +127,21 @@ async function run(config: Config) {
   updateIconfontSet(options)
 }
 
-function updateIconfontData({ data, config: { iconfontPath } }: Options) {
-  const filename = `iconfont-data.js`
+function updateIconfontData({ data, config: { iconfontPath, useTs } }: Options) {
+  const filename = `iconfont-data`
   const context = ejs.render(
     fs.readFileSync(path.resolve(__dirname, `../template/${filename}.ejs`), 'utf-8'),
     {
       data: decodeURIComponent(JSON.stringify(data, null, 2)),
     },
   )
+  const _ = `${filename}${useTs ? '.ts' : '.js'}`
+
   fs.writeFileSync(
-    path.resolve(iconfontPath, filename),
+    path.resolve(
+      iconfontPath,
+      _,
+    ),
     context,
   )
 }
