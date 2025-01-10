@@ -84,6 +84,7 @@ async function init() {
     }
     const _config = JSON.parse(fs.readFileSync(configFilePath).toString()) as Config
     await run(_config)
+    console.log(c.green('✨✨✨ 操作成功'))
   }
   catch (error) {
     console.warn(error)
@@ -182,8 +183,10 @@ function updateIconfontComponent(
   const typeStr = types.map(e => `"${e}"`).join(' | ')
 
   if (!showOverwrite) {
+    console.log('\n')
+    console.log(c.bgCyan('提示'))
     console.log(
-      c.cyan(`文件 ${componentFilePath} 已存在!\n如果需要覆盖重新生成请使用 --force 或者 -f 参数`),
+      c.cyan(`组件 ${componentFilePath} 已存在!\n当前命令只会替换当前组件的"IconfontTypes"的类型声明和其他文件\n如果需要覆盖重新生成请使用 --force 或者 -f 参数\n`),
     )
     if (
       fileExtension === 'js'
