@@ -179,10 +179,27 @@ function updateIconfontComponent(
   = fileExists(componentFilePath) === false
   || values.force
 
+  const typeStr = types.map(e => `"${e}"`).join(' | ')
+
   if (!showOverwrite) {
     console.log(
       c.cyan(`文件 ${componentFilePath} 已存在!\n如果需要覆盖重新生成请使用 --force 或者 -f 参数`),
     )
+    if (
+      fileExtension === 'js'
+      && framework === 'vue'
+      && fileExists(componentFilePath)
+    ) {
+      const vueFile = fs.readFileSync(componentFilePath).toString()
+      const updatedString = vueFile.replace(
+        /@typedef\s*\{[^}]+\}\s*IconfontTypes/,
+        `@typedef { ${typeStr} } IconfontTypes`,
+      )
+      fs.writeFileSync(
+        componentFilePath,
+        updatedString,
+      )
+    }
     return
   }
 
@@ -190,7 +207,7 @@ function updateIconfontComponent(
   const context = ejs.render(
     fs.readFileSync(path.resolve(__dirname, `../template/${filename}`), 'utf-8'),
     {
-      types: types.map(e => `"${e}"`).join(' | '),
+      types: typeStr,
     },
   )
 
