@@ -167,6 +167,6 @@ npx @zd~/iconfont-cli@latest
 > [!NOTE]
 > 注意组件文件(react 为 `iconfont.jsx` 或者 `iconfont.tsx`, vue 为 `iconfont.vue`) 只会创建一次！
 >
-> **目的**是你可以自己修改组件细节，例如你使用小程序需要把默认单位调整为`rpx`，或者修改组件的默认颜色等等
+> **目的**是你可以自己修改组件细节，例如上文中的`src/components/iconfont/iconfont.tsx`, 使用小程序的情况下你可以把`size`的单位调整为`rpx`，或者修改组件的默认颜色等
 >
 > 如果需要覆盖文件重新创建请是使用`npx @zd~/iconfont-cli@latest --force`
