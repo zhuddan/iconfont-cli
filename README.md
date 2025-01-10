@@ -99,7 +99,7 @@ src/components/iconfont/iconfont.tsx
 
 ```tsx
 import type { CSSProperties, HTMLAttributes } from 'react'
-import type { IconfontType } from './iconfont-types'
+import type { IconfontTypes } from './iconfont-types'
 import clsx from 'clsx'
 import { useMemo } from 'react'
 import data from './iconfont-data'
@@ -107,7 +107,7 @@ import data from './iconfont-data'
 interface IconfontProps extends HTMLAttributes<HTMLDivElement> {
   size?: number
   color?: string
-  name: IconfontType
+  name: IconfontTypes
 }
 
 export function Iconfont({
