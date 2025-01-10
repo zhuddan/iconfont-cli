@@ -1,6 +1,6 @@
 {
   "jsLink": "//at.alicdn.com/t/c/font_4807277_enrwdyz7swf.js",
-  "framework": "vue",
+  "framework": "react",
   "useTs": false,
-  "iconfontPath": "./demo/vue/ts/iconfont"
+  "iconfontPath": "./demo/react/js/iconfont"
 }

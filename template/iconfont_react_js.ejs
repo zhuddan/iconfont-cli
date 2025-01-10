@@ -1,0 +1,54 @@
+/**
+ * @typedef {object} IconfontProps
+ * @property {number} [size] - The size of the icon in pixels
+ * @property {string} [color="#000000"] - The color of the icon
+ * @property {<%- types %>} name - The name of the icon to display
+ * @property {React.CSSProperties} [style] - Additional CSS styles
+ * @property {string} [className] - Additional CSS class names
+ */
+
+import clsx from 'clsx'
+import { useMemo } from 'react'
+import data from './iconfont-data'
+
+/**
+ * Renders an icon from the iconfont set
+ * @param {IconfontProps & React.HTMLAttributes<HTMLDivElement>} props - Component props
+ * @returns {JSX.Element} Rendered icon component
+ */
+export function Iconfont({
+  size,
+  color = '#000000',
+  name,
+  style,
+  className,
+  ...rest
+}) {
+  const mask = useMemo(() => {
+    return `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(data[name])}")`
+  }, [name])
+
+  const innerStyle = useMemo(() => {
+    const _size = size ? `${size}px` : '1em'
+    /** @type {React.CSSProperties} */
+    const styles = {
+      ...style,
+      mask,
+      WebkitMask: mask,
+      maskSize: _size,
+      width: _size,
+      height: _size,
+      backgroundColor: color,
+      display: 'inline-block',
+    }
+    return styles
+  }, [color, mask, size, style])
+
+  return (
+    <div
+      className={clsx('iconfont', className)}
+      style={innerStyle}
+      {...rest}
+    />
+  )
+}
