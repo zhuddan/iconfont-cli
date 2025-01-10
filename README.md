@@ -179,6 +179,10 @@ npx @zd~/iconfont-cli@latest
 >
 > 目的在于支持用户自定义修改组件细节。例如，在小程序环境中可将 size 单位调整为 rpx，或修改组件的默认颜色。
 >
-> 如果需要覆盖文件重新创建，请使用以下命令：`npx @zd~/iconfont-cli@latest --force`
+> 如果需要覆盖文件重新创建，请使用以下命令：
+
+```shell
+npx @zd~/iconfont-cli@latest --force
+```
 
 感谢您的使用。如果你有任何问题或建议，请随时联系我。
