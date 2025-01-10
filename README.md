@@ -2,43 +2,47 @@
 
 一个基于[iconfont](https://www.iconfont.cn/)自动生成react/vue组件的cli, 不依赖字体, 多端支持(tarojs/uni-app)
 
-## 对比
+## 优势对比
 
-- 使用 `iconfont` 的字体文件，不用每次修改之后重新下载、替换字体文件和css
-- 使用 `Symbol字体图标的在线js`，不能兼容小程序
+### 传统方式
 
-## 特点
+1. **字体文件方式**
+   每次修改后需重新下载并替换字体文件和 CSS，过程繁琐。
+2. **在线 JS 引用方式**
+   Symbol 字体图标的在线 JS 方式无法兼容小程序环境。
 
-- 配置简单
-- 类型支持(即使你不使用ts)
-- 可自定义修改
-- 支持小程序(tarojs/uni-app)
-- 具名导出支持组件预览(见下图)
+### @zd~/iconfont-cli
+
+- **自动化**：仅需简单配置，快速生成组件。
+- **类型支持**：内置类型定义，即使你不使用 TypeScript 也能获得良好的开发体验。
+- **小程序兼容**：完整支持小程序平台（TaroJS、Uni-App）。
+- **可扩展性**：支持自定义调整，灵活满足需求。
+- **组件预览**：具名导出便于预览组件效果（如下图所示）。
 
 ![readme.jpg](./.github/code.png)
 
 ## 如何使用
 
-1. 复制你的Symbol字体图标的在线js链接(**确保可以访问**)
+1. **复制你的 Symbol 字体图标的在线 JS 链接（确保可以访问）**
 
 ![readme.jpg](./.github/readme.jpg)
 
-2. 运行命令
+2. **运行命令**
 
 ```shell
 npx @zd~/iconfont-cli@latest
 ```
 
-3. 根据命令提示完成你的配置
+3. **根据命令提示完成你的配置**
 
-- 请输入Symbol字体图标的在线js链接
-- 请选择一个框架 (react/vue)
-- 是否使用ts (yes/no)
+- 输入 Symbol 字体图标的在线 JS 链接
+- 选择一个框架（React/Vue）
+- 设置 Iconfont 组件路径文件夹（默认 src/components/iconfont）
 - Iconfont 组件路径文件夹 (默认 src/components/iconfont)
-- 是否具名导出每一个图标组件 (仅 react 可用)
-- 具名导出组件的组件前缀 (仅 react 可用)
+- 是否具名导出每一个图标组件 (仅 React 可用)
+- 设置具名导出组件的组件前缀（仅 React 可用）
 
-然后会在你的执行命令的文件夹下生成一个`iconfont-cli-config.json`文件
+配置完成后，工具会在当前目录下生成一个 iconfont-cli-config.json 文件，内容示例如下:
 
 ```json
 {
@@ -51,7 +55,9 @@ npx @zd~/iconfont-cli@latest
 }
 ```
 
-4. 最后他会在 `src/components/iconfont` 目录下生成相应的组件文件，并提示操作成功
+4. **生成组件文件**
+
+工具会在 src/components/iconfont 目录下生成相应的组件文件，并提示操作成功。
 
 生成的示例以上面配置为例
 
@@ -147,13 +153,17 @@ export function Iconfont({
 }
 ```
 
-5. 配置文件存在之后，更新在线图标之后**只用再次执行下面命令**即可
+5. **更新在线图标**
+
+更新在线图标后，只需再次运行以下命令即可同步更新：
 
 ```shell
 npx @zd~/iconfont-cli@latest
 ```
 
-6. 为了方便使用，你可以把下面命令添加到你的`package.json`
+6.  **推荐脚本配置**
+
+为方便使用，可以将以下命令添加到项目的 package.json 中：
 
 ```json
 {
@@ -165,10 +175,10 @@ npx @zd~/iconfont-cli@latest
 ```
 
 > [!NOTE]
-> 注意组件文件(react 为 `iconfont.jsx` 或者 `iconfont.tsx`, vue 为 `iconfont.vue`) 只会创建一次！
+> 组件文件（React 为 iconfont.jsx 或 iconfont.tsx，Vue 为 iconfont.vue）默认只创建一次。
 >
-> **目的**是你可以自己修改组件细节，例如上文中的`src/components/iconfont/iconfont.tsx`, 使用小程序的情况下你可以把`size`的单位调整为`rpx`，或者修改组件的默认颜色等
+> 目的在于支持用户自定义修改组件细节。例如，在小程序环境中可将 size 单位调整为 rpx，或修改组件的默认颜色。
 >
-> 如果需要覆盖文件重新创建请是使用`npx @zd~/iconfont-cli@latest --force`
+> 如果需要覆盖文件重新创建，请使用以下命令：`npx @zd~/iconfont-cli@latest --force`
 
 感谢您的使用。如果你有任何问题或建议，请随时联系我。
