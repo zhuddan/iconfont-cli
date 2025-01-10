@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CSSProperties, PropType } from 'vue'
 import data from './iconfont-data'
-import type { IconfontType } from './iconfont-types'
+import type { IconfontTypes } from './iconfont-types'
 
 const props = defineProps({
   size: {
@@ -12,7 +12,7 @@ const props = defineProps({
     default: '#000000',
   },
   name: {
-    type: String as PropType<IconfontType>,
+    type: String as PropType<IconfontTypes>,
     required: true,
   },
 })
