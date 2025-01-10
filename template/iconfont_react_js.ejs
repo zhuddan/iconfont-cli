@@ -37,12 +37,15 @@ export function Iconfont({
     const styles = {
       ...style,
       mask,
-      WebkitMask: mask,
-      maskSize: _size,
-      width: _size,
-      height: _size,
-      backgroundColor: color,
-      display: 'inline-block',
+      '-webkit-mask': mask,
+      'maskSize': _size,
+      '-webkit-mask-size': _size,
+      'width': _size,
+      'height': _size,
+      'backgroundColor': color,
+      'maskRepeat': 'no-repeat',
+      '-webkit-mask-repeat': 'no-repeat',
+      'display': 'inline-block',
     }
     return styles
   }, [color, mask, size, style])

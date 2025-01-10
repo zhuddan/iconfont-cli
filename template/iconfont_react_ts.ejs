@@ -30,9 +30,12 @@ export function Iconfont({
       // @ts-expect-error
       '-webkit-mask': mask,
       'mask-size': _size,
+      '-webkit-mask-size': _size,
       'width': _size,
       'height': _size,
       'backgroundColor': color,
+      'maskRepeat': 'no-repeat',
+      '-webkit-mask-repeat': 'no-repeat',
       'display': 'inline-block',
     } satisfies CSSProperties
   }, [color, mask, size, style])
