@@ -1,6 +1,6 @@
 <%_ if (useTs) { _%>
-import { ComponentProps } from 'react'
-import { Iconfont } from '.'
+import type { ComponentProps } from 'react'
+import { Iconfont } from './iconfont'
 
 type CommonIconfontProps = Omit<ComponentProps<typeof Iconfont>, 'name'>
 <%_ }else{ _%>
@@ -8,7 +8,7 @@ type CommonIconfontProps = Omit<ComponentProps<typeof Iconfont>, 'name'>
  * @typedef {import('react').ComponentProps<typeof Iconfont>} IconfontProps
  * @typedef {Omit<IconfontProps, 'name'>} CommonIconfontProps
  */
-import { Iconfont } from '.'
+import { Iconfont } from './iconfont'
 <%_ } _%>
 <% sets.forEach(function(set){ %>
 /**
