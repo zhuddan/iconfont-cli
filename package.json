@@ -22,10 +22,16 @@
     "dev": "tsup --watch",
     "build": "tsup",
     "p": "npm publish --access public",
+    "test:force": "node ./dist/script.js --force",
+    "tag": "bumpp",
     "test": "node ./dist/script.js"
   },
   "dependencies": {
-    "terser": "^5.37.0"
+    "cheerio": "^1.0.0",
+    "ejs": "^3.1.10",
+    "figures": "^6.1.0",
+    "fs-extra": "^11.2.0",
+    "kolorist": "^1.8.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.12.2",
@@ -34,15 +40,12 @@
     "@types/ejs": "^3.1.5",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.10.5",
-    "cheerio": "^1.0.0",
-    "ejs": "^3.1.10",
+    "bumpp": "^9.10.0",
     "eslint": "^9.17.0",
     "eslint-plugin-format": "^1.0.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.16",
-    "figures": "^6.1.0",
-    "fs-extra": "^11.2.0",
-    "kolorist": "^1.8.0",
+    "terser": "^5.37.0",
     "tsup": "^8.3.5",
     "typescript": "^5.7.3"
   }

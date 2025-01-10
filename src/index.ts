@@ -1,5 +1,4 @@
 // #!/usr/bin/env node
-
 import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
@@ -7,6 +6,8 @@ import * as p from '@clack/prompts'
 import * as cheerio from 'cheerio'
 import * as ejs from 'ejs'
 import { ensureDir } from 'fs-extra'
+import * as c from 'kolorist'
+import { values } from './args'
 import { frameworkOptions, SVG_BASE64_PERFIX } from './constants'
 import { fileExists, toPascalCase } from './utils'
 
@@ -170,6 +171,20 @@ function updateIconfontComponent(
   const ext = framework === 'react'
     ? useTs ? '.tsx' : '.jsx'
     : '.vue'
+  const componentName = `iconfont${ext}`
+
+  const componentFilePath = path.resolve(iconfontPath, componentName)
+
+  const showOverwrite
+  = fileExists(componentFilePath) === false
+  || values.force
+
+  if (!showOverwrite) {
+    console.log(
+      c.cyan(`文件 ${componentFilePath} 已存在!\n如果需要覆盖重新生成请使用 --force 或者 -f 参数`),
+    )
+    return
+  }
 
   const filename = `iconfont_${framework}_${fileExtension}.ejs`
   const context = ejs.render(
@@ -179,10 +194,8 @@ function updateIconfontComponent(
     },
   )
 
-  const componentName = `iconfont${ext}`
-
   fs.writeFileSync(
-    path.resolve(iconfontPath, componentName),
+    componentFilePath,
     context,
   )
 }

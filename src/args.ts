@@ -3,19 +3,11 @@ import { parseArgs } from 'node:util'
 const { values, positionals } = parseArgs({
   allowPositionals: true,
   options: {
-    config: {
-      type: 'string',
-      short: 'c',
-    },
-    localdir: {
-      type: 'string',
-      short: 'l',
-    },
-    serverdir: {
-      type: 'string',
-      short: 's',
+    force: {
+      type: 'boolean',
+      short: 'f',
     },
   },
 })
 
-export { values, positionals }
+export { positionals, values }
