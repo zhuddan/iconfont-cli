@@ -30,8 +30,8 @@
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
-    "test:force": "node ./dist/script.js --force",
     "tag": "bumpp",
+    "test:force": "node ./dist/script.js --force",
     "test": "node ./dist/script.js"
   },
   "dependencies": {
