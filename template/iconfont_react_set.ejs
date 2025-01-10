@@ -1,0 +1,27 @@
+<%_ if (useTs) { _%>
+import { ComponentProps } from 'react'
+import { Iconfont } from '.'
+
+type CommonIconfontProps = Omit<ComponentProps<typeof Iconfont>, 'name'>
+<%_ }else{ _%>
+/**
+ * @typedef {import('react').ComponentProps<typeof Iconfont>} IconfontProps
+ * @typedef {Omit<IconfontProps, 'name'>} CommonIconfontProps
+ */
+import { Iconfont } from '.'
+<%_ } _%>
+<% sets.forEach(function(set){ %>
+/**
+ * <%- set.componentName %> iconfont component wrapper
+<% if (!useTs) { %> * @param {CommonIconfontProps} props All Iconfont props except 'name'
+ * @returns {JSX.Element} <%- set.componentName %> iconfont component
+ *
+<%_ }else{ _%>
+ *
+<%_ } _%> 
+ * ![<%- set.componentName %>](<%- set.svgImage %>)
+ */
+export function <%- set.componentName %>(props<%_ if (useTs) { _%>: CommonIconfontProps<%_ } _%>) {
+  return <Iconfont name="<%- set.name %>" {...props} />
+}
+<% }); %>

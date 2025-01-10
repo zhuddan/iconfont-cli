@@ -7,8 +7,8 @@ import * as p from '@clack/prompts'
 import * as cheerio from 'cheerio'
 import * as ejs from 'ejs'
 import { ensureDir } from 'fs-extra'
-import { achieveOptions, frameworkOptions } from './constants'
-import { fileExists } from './utils'
+import { frameworkOptions, SVG_BASE64_PERFIX } from './constants'
+import { fileExists, toPascalCase } from './utils'
 
 const cwd = process.cwd()
 
@@ -17,6 +17,8 @@ interface Config {
   framework: 'vue' | 'react'
   useTs: boolean
   iconfontPath: string
+  set: boolean
+  iconPrefix?: string
 }
 
 const configFilePath = path.resolve(cwd, 'iconfont-cli-config.json')
@@ -52,6 +54,15 @@ async function init() {
             defaultValue: 'src/components/iconfont',
             placeholder: 'src/components/iconfont',
           }),
+          set: () => p.confirm({
+            message: '是否具名导出每一个图标组件',
+            initialValue: true,
+          }),
+          iconPrefix: () => p.text({
+            message: '具名导出组件的组件前缀',
+            initialValue: 'icon',
+            defaultValue: '',
+          }),
         },
         {
           onCancel: () => {
@@ -71,6 +82,12 @@ async function init() {
   }
 }
 
+interface Options {
+  config: Config
+  types: string[]
+  data: Record<string, string>
+}
+
 async function run(config: Config) {
   const json = await fetch(`https://${config.jsLink}`).then(res => res.text())
   const ic_path = path.resolve(cwd, config.iconfontPath)
@@ -79,7 +96,7 @@ async function run(config: Config) {
   const svgRegex = /<svg[^>]*>([\s\S]*?)<\/svg>/
   const x = json.match(svgRegex)?.[1] ?? ''
   const $ = cheerio.load(`<div>${x}<div/>`)
-  const data: Record<string, any> = {}
+  const data: Record<string, string> = {}
   const types: string[] = []
   $('symbol').each((index, element) => {
     const id = $(element).attr('id')?.replace('icon-', '') ?? ''
@@ -91,12 +108,18 @@ async function run(config: Config) {
     data[id] = outerHTML.replace(/symbol/g, 'svg').replace(/viewbox/gi, 'viewBox')
     types.push(id)
   })
-  updateIconfontData(data, config)
-  updateIconfontType(types, config)
-  updateIconfontComponent(types, config)
+  const options: Options = {
+    data,
+    config,
+    types,
+  }
+  updateIconfontData(options)
+  updateIconfontType(options)
+  updateIconfontComponent(options)
+  updateIconfontSet(options)
 }
 
-function updateIconfontData(data: Record<string, any>, { iconfontPath }: Config) {
+function updateIconfontData({ data, config: { iconfontPath } }: Options) {
   const filename = `iconfont-data.js`
   const context = ejs.render(
     fs.readFileSync(path.resolve(__dirname, `../template/${filename}.ejs`), 'utf-8'),
@@ -110,7 +133,7 @@ function updateIconfontData(data: Record<string, any>, { iconfontPath }: Config)
   )
 }
 
-function updateIconfontType(types: string[], { iconfontPath, useTs }: Config) {
+function updateIconfontType({ config: { useTs, iconfontPath }, types }: Options) {
   if (!useTs) {
     return
   }
@@ -127,13 +150,15 @@ function updateIconfontType(types: string[], { iconfontPath, useTs }: Config) {
   )
 }
 
-function updateIconfontComponent(types: string[], config: Config) {
-  const fileExtension = config.useTs ? 'ts' : 'js'
-  const ext = config.framework === 'react'
-    ? config.useTs ? '.tsx' : '.jsx'
+function updateIconfontComponent(
+  { config: { useTs, framework, iconfontPath }, types }: Options,
+) {
+  const fileExtension = useTs ? 'ts' : 'js'
+  const ext = framework === 'react'
+    ? useTs ? '.tsx' : '.jsx'
     : '.vue'
 
-  const filename = `iconfont_${config.framework}_${fileExtension}.ejs`
+  const filename = `iconfont_${framework}_${fileExtension}.ejs`
   const context = ejs.render(
     fs.readFileSync(path.resolve(__dirname, `../template/${filename}`), 'utf-8'),
     {
@@ -144,9 +169,46 @@ function updateIconfontComponent(types: string[], config: Config) {
   const componentName = `iconfont${ext}`
 
   fs.writeFileSync(
-    path.resolve(config.iconfontPath, componentName),
+    path.resolve(iconfontPath, componentName),
     context,
   )
+}
+
+function updateIconfontSet(
+  {
+    data,
+    config: { set, framework, iconfontPath, useTs, iconPrefix },
+    types,
+  }: Options,
+) {
+  if (!set)
+    return
+
+  const filename = `iconfont_${framework}_set.ejs`
+  if (framework === 'react') {
+    const context = ejs.render(
+      fs.readFileSync(path.resolve(__dirname, `../template/${filename}`), 'utf-8'),
+      {
+        useTs,
+        sets: types.map((name) => {
+          const svg = data[name].replace(/currentColor/g, '#ffffff')
+          const _iconPrefix = iconPrefix ? `${iconPrefix.replace(/[^a-z0-9]/gi, '')}-` : ''
+          const componentName = toPascalCase(_iconPrefix + name)
+          const svgImage = `${SVG_BASE64_PERFIX}${encodeURIComponent(svg)}`
+          return {
+            componentName,
+            name,
+            svgImage,
+          }
+        }),
+      },
+    )
+
+    fs.writeFileSync(
+      path.resolve(iconfontPath, `iconfont-set${useTs ? '.tsx' : '.jsx'}`),
+      context,
+    )
+  }
 }
 
 init()

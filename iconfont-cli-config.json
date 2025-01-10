@@ -1,6 +1,8 @@
 {
   "jsLink": "//at.alicdn.com/t/c/font_4807277_enrwdyz7swf.js",
   "framework": "react",
-  "useTs": false,
-  "iconfontPath": "./demo/react/js/iconfont"
+  "useTs": true,
+  "iconfontPath": "src/components/iconfont",
+  "set": true,
+  "iconPrefix": "iconfont"
 }

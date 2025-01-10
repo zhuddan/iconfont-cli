@@ -19,15 +19,4 @@ export const frameworkOptions: PromItem<'vue' | 'react'>[] = [
   },
 ]
 
-export const achieveOptions: PromItem<'mask' | 'backgroundImage'>[] = [
-  {
-    label: c.reset('mask'),
-    value: 'mask',
-    hint: '新特性',
-  },
-  {
-    label: c.gray('backgroundImage'),
-    value: 'backgroundImage',
-    hint: '兼容性好',
-  },
-]
+export const SVG_BASE64_PERFIX = `data:image/svg+xml;charset=utf-8,`
