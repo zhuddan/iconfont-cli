@@ -2,8 +2,10 @@
 
 一个基于[iconfont](https://www.iconfont.cn/)自动生成`react`/`vue`组件的cli。
 
-- 相比使用 `iconfont`的字体文件，每次修改之后需要重新下载字体文件和复制css
-- 使用`Symbol字体图标的在线js`，不能兼容小程序。
+## 对比
+
+- 使用 `iconfont` 的字体文件，不用每次修改之后重新下载字体文件和替换css
+- 使用 `Symbol字体图标的在线js`，不能兼容小程序。
 
 ## 特点
 
