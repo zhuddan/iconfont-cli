@@ -1,6 +1,6 @@
 {
   "name": "@zd~/iconfont-cli",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "一个基于[iconfont](https://www.iconfont.cn/)自动生成`react`/`vue`组件的cli",
   "author": "zhuddan",
   "license": "ISC",
