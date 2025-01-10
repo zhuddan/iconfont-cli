@@ -32,7 +32,7 @@ async function init() {
       const config = await p.group(
         {
           jsLink: () => p.text({
-            message: '请输入Symbol字体图标的在线js链接(参考readme文件)',
+            message: '请输入 Symbol 字体图标的在线 JS 链接(参考readme文件)',
             placeholder: '例如: //at.alicdn.com/t/c/font_4807277_enrwdyz7swf.js',
             validate(value) {
               if (value === '') {
@@ -52,7 +52,7 @@ async function init() {
             initialValue: true,
           }),
           iconfontPath: () => p.text({
-            message: 'Iconfont 组件路径文件夹',
+            message: '设置 Iconfont 组件路径文件夹',
             initialValue: 'src/components/iconfont',
             defaultValue: 'src/components/iconfont',
             placeholder: 'src/components/iconfont',
@@ -69,7 +69,7 @@ async function init() {
             if (results.framework === 'vue')
               return
             return p.text({
-              message: '具名导出组件的组件前缀',
+              message: '设置具名导出组件的组件前缀',
               initialValue: 'icon',
               defaultValue: '',
             })

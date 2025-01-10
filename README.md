@@ -53,8 +53,8 @@ npx @zd~/iconfont-cli@latest
 
 - 输入 Symbol 字体图标的在线 JS 链接
 - 选择一个框架（React/Vue）
+- 是否使用ts (yes / no)
 - 设置 Iconfont 组件路径文件夹（默认 src/components/iconfont）
-- Iconfont 组件路径文件夹 (默认 src/components/iconfont)
 - 是否具名导出每一个图标组件 (仅 React 可用)
 - 设置具名导出组件的组件前缀（仅 React 可用）
 
@@ -71,7 +71,7 @@ npx @zd~/iconfont-cli@latest
 }
 ```
 
-4. **生成组件文件**
+1. **生成组件文件**
 
 工具会在 src/components/iconfont 目录下生成相应的组件文件，并提示操作成功。
 
