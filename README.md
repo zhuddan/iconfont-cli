@@ -150,9 +150,18 @@ export function Iconfont({
 5. 配置文件存在之后，更新了图标只用再次执行下面配置即可
 
 ```shell
-
 npx @zd~/iconfont-cli@latest
+```
 
+6. 为了方便是同，你可以把下面命令添加到你的`package.json`
+
+```json
+{
+  "scripts": {
+    "update-iconfont": "npx @zd~/iconfont-cli@latest",
+    "update-iconfont:force": "npx @zd~/iconfont-cli@latest --force"
+  }
+}
 ```
 
 > [!NOTE]
