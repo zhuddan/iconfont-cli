@@ -190,8 +190,8 @@ function updateIconfontComponent(
       && framework === 'vue'
       && fileExists(componentFilePath)
     ) {
-      const vueFile = fs.readFileSync(componentFilePath).toString()
-      const updatedString = vueFile.replace(
+      const file = fs.readFileSync(componentFilePath).toString()
+      const updatedString = file.replace(
         /@typedef\s*\{[^}]+\}\s*IconfontTypes/,
         `@typedef { ${typeStr} } IconfontTypes`,
       )

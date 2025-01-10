@@ -16,6 +16,7 @@
   "files": [
     "./dist/script.js",
     "README.md",
+    "readme.jpg",
     "template"
   ],
   "scripts": {
