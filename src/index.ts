@@ -187,7 +187,6 @@ function updateIconfontComponent(
     )
     if (
       fileExtension === 'js'
-      && framework === 'vue'
       && fileExists(componentFilePath)
     ) {
       const file = fs.readFileSync(componentFilePath).toString()

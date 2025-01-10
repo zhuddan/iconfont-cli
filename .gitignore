@@ -2,3 +2,4 @@ node_modules
 dist/script.js
 demo
 src/components
+iconfont-cli-config.json
