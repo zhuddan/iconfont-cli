@@ -147,7 +147,7 @@ export function Iconfont({
 }
 ```
 
-5. 配置文件存在之后，更新了图标只用再次执行下面配置即可
+5. 配置文件存在之后，更新在线图标之后**只用再次执行下面命令**即可
 
 ```shell
 npx @zd~/iconfont-cli@latest
@@ -170,3 +170,5 @@ npx @zd~/iconfont-cli@latest
 > **目的**是你可以自己修改组件细节，例如上文中的`src/components/iconfont/iconfont.tsx`, 使用小程序的情况下你可以把`size`的单位调整为`rpx`，或者修改组件的默认颜色等
 >
 > 如果需要覆盖文件重新创建请是使用`npx @zd~/iconfont-cli@latest --force`
+
+感谢您的使用。如果你有任何问题或建议，请随时联系我。
