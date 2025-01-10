@@ -118,7 +118,7 @@ function updateIconfontType(types: string[], { iconfontPath, useTs }: Config) {
   const context = ejs.render(
     fs.readFileSync(path.resolve(__dirname, `../template/${filename}.ejs`), 'utf-8'),
     {
-      data: types.map(e => `"${e}"`).join(' | '),
+      types: types.map(e => `"${e}"`).join(' | '),
     },
   )
   fs.writeFileSync(
@@ -130,15 +130,10 @@ function updateIconfontType(types: string[], { iconfontPath, useTs }: Config) {
 function updateIconfontComponent(types: string[], config: Config) {
   const fileExtension = config.useTs ? 'ts' : 'js'
   const ext = config.framework === 'react'
-    ? '.jsx'
+    ? config.useTs ? '.tsx' : '.jsx'
     : '.vue'
 
-  const componentName = `iconfont${
-    config.framework === 'react'
-      ? config.useTs ? '.tsx' : '.jsx'
-      : '.vue'
-  }`
-  const filename = `iconfont_${config.framework}_${fileExtension}${ext}.ejs`
+  const filename = `iconfont_${config.framework}_${fileExtension}.ejs`
   const context = ejs.render(
     fs.readFileSync(path.resolve(__dirname, `../template/${filename}`), 'utf-8'),
     {
@@ -146,7 +141,8 @@ function updateIconfontComponent(types: string[], config: Config) {
     },
   )
 
-  console.log(path.resolve(config.iconfontPath, componentName))
+  const componentName = `iconfont${ext}`
+
   fs.writeFileSync(
     path.resolve(config.iconfontPath, componentName),
     context,
