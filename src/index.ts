@@ -13,14 +13,12 @@ import { fileExists } from './utils'
 const cwd = process.cwd()
 
 interface Config {
-  js: string
+  jsLink: string
   framework: 'vue' | 'react'
-  mini: boolean
+  useTs: boolean
   iconfontPath: string
-  achieve: 'mask' | 'backgroundImage'
-  unit: string
-  color: string
 }
+
 const configFilePath = path.resolve(cwd, 'iconfont-cli-config.json')
 async function init() {
   try {
@@ -28,7 +26,7 @@ async function init() {
     if (!hasConfig) {
       const config = await p.group(
         {
-          js: () => p.text({
+          jsLink: () => p.text({
             message: '请输入Symbol字体图标的在线js链接(参考readme文件)',
             placeholder: '例如: //at.alicdn.com/t/c/font_4807277_enrwdyz7swf.js',
             validate(value) {
@@ -44,32 +42,15 @@ async function init() {
             message: '请选择一个框架',
             options: frameworkOptions,
           }),
-          mini: ({ results }) => {
-            return p.confirm({
-              message: results.framework === 'react' ? '是否使用tarojs' : '是否使用uniapp',
-              initialValue: false,
-            })
-          },
+          useTs: () => p.confirm({
+            message: '是否使用ts',
+            initialValue: true,
+          }),
           iconfontPath: () => p.text({
             message: 'Iconfont 组件路径文件夹',
             initialValue: 'src/components/iconfont',
             defaultValue: 'src/components/iconfont',
             placeholder: 'src/components/iconfont',
-          }),
-          achieve: () => p.select({
-            message: '图标实现方式',
-            options: achieveOptions,
-          }),
-          unit: () => p.text({
-            message: '图标大小单位(小程序可以选择rpx)',
-            initialValue: 'px',
-            defaultValue: 'px',
-            placeholder: 'px',
-          }),
-          color: () => p.text({
-            message: '图标默认颜色',
-            initialValue: '#000000',
-            defaultValue: '#000000',
           }),
         },
         {
@@ -91,7 +72,7 @@ async function init() {
 }
 
 async function run(config: Config) {
-  const json = await fetch(`https://${config.js}`).then(res => res.text())
+  const json = await fetch(`https://${config.jsLink}`).then(res => res.text())
   const ic_path = path.resolve(cwd, config.iconfontPath)
   await ensureDir(ic_path)
   config.iconfontPath = ic_path
@@ -112,10 +93,10 @@ async function run(config: Config) {
   })
   updateIconfontData(data, config)
   updateIconfontType(types, config)
-  updateIconfontComponent(config)
+  updateIconfontComponent(types, config)
 }
 
-function updateIconfontData(data: any, { iconfontPath }: Config) {
+function updateIconfontData(data: Record<string, any>, { iconfontPath }: Config) {
   const filename = `iconfont-data.js`
   const context = ejs.render(
     fs.readFileSync(path.resolve(__dirname, `../template/${filename}.ejs`), 'utf-8'),
@@ -129,12 +110,15 @@ function updateIconfontData(data: any, { iconfontPath }: Config) {
   )
 }
 
-function updateIconfontType(data: string[], { iconfontPath }: Config) {
+function updateIconfontType(types: string[], { iconfontPath, useTs }: Config) {
+  if (!useTs) {
+    return
+  }
   const filename = `iconfont-types.ts`
   const context = ejs.render(
     fs.readFileSync(path.resolve(__dirname, `../template/${filename}.ejs`), 'utf-8'),
     {
-      data: data.map(e => `"${e}"`).join(' | '),
+      data: types.map(e => `"${e}"`).join(' | '),
     },
   )
   fs.writeFileSync(
@@ -143,21 +127,30 @@ function updateIconfontType(data: string[], { iconfontPath }: Config) {
   )
 }
 
-function updateIconfontComponent(config: Config) {
-  const ext = config.framework === 'react' ? '.tsx' : '.vue'
-  const componentName = `iconfont${ext}`
-  const filename = `iconfont_${config.framework}_${config.mini ? 'mini' : 'default'}${ext}`
+function updateIconfontComponent(types: string[], config: Config) {
+  const fileExtension = config.useTs ? 'ts' : 'js'
+  const ext = config.framework === 'react'
+    ? '.jsx'
+    : '.vue'
+
+  const componentName = `iconfont${
+    config.framework === 'react'
+      ? config.useTs ? '.tsx' : '.jsx'
+      : '.vue'
+  }`
+  const filename = `iconfont_${config.framework}_${fileExtension}${ext}.ejs`
   const context = ejs.render(
-    fs.readFileSync(path.resolve(__dirname, `../template/${filename}.ejs`), 'utf-8'),
+    fs.readFileSync(path.resolve(__dirname, `../template/${filename}`), 'utf-8'),
     {
-      data: config,
+      types: types.map(e => `"${e}"`).join(' | '),
     },
   )
+
+  console.log(path.resolve(config.iconfontPath, componentName))
   fs.writeFileSync(
     path.resolve(config.iconfontPath, componentName),
     context,
   )
-  console.log(filename)
 }
 
 init()

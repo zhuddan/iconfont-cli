@@ -1,9 +1,6 @@
 {
-  "js": "//at.alicdn.com/t/c/font_4807277_enrwdyz7swf.js",
+  "jsLink": "//at.alicdn.com/t/c/font_4807277_enrwdyz7swf.js",
   "framework": "vue",
-  "mini": false,
-  "iconfontPath": "demo/vue/components/iconfont",
-  "achieve": "mask",
-  "unit": "px",
-  "color": "#000000"
+  "useTs": false,
+  "iconfontPath": "./demo/vue/js/iconfont"
 }
