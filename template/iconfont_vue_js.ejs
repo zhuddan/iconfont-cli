@@ -27,8 +27,8 @@ const mask = computed(() => {
 const innerStyle = computed(() => {
   const _size = props.size ? `${props.size}px` : '1em'
   return {
-    'mask': mask.value,
-    '-webkit-mask': mask.value,
+    'mask-image': mask.value,
+    '-webkit-mask-image': mask.value,
     'mask-size': _size,
     '-webkit-mask-size': _size,
     'mask-repeat': 'no-repeat',

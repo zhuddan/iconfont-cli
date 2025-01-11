@@ -25,10 +25,10 @@ export function Iconfont({
     const _size = size ? `${size}px` : '1em'
     return {
       ...style,
-      'mask': mask,
+      'maskImage': mask,
       // eslint-disable-next-line ts/ban-ts-comment
       // @ts-expect-error
-      '-webkit-mask': mask,
+      '-webkit-mask-image': mask,
       'mask-size': _size,
       '-webkit-mask-size': _size,
       'width': _size,
