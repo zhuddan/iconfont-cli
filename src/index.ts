@@ -9,7 +9,7 @@ import { ensureDir } from 'fs-extra'
 import * as c from 'kolorist'
 import { values } from './args'
 import { banner } from './banner'
-import { frameworkOptions, SVG_BASE64_PERFIX } from './constants'
+import { FRAMEWORK_OPTIONS, SVG_BASE64_PERFIX } from './constants'
 import { fileExists, toPascalCase } from './utils'
 
 const cwd = process.cwd()
@@ -45,7 +45,7 @@ async function init() {
           }),
           framework: () => p.select({
             message: '请选择一个框架',
-            options: frameworkOptions,
+            options: FRAMEWORK_OPTIONS,
           }),
           useTs: () => p.confirm({
             message: '是否使用ts',
