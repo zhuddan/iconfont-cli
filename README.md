@@ -19,15 +19,15 @@
 - **可扩展性**：支持自定义调整，灵活满足需求。
 - **组件预览**：具名导出便于预览组件效果（如下图所示）。
 
-![readme.jpg](./.github/code.png)
+![code.jpg](./.github/code.png)
 
 ## 如何使用
 
 1. **复制你的 Symbol 字体图标的在线 JS 链接（确保可以访问）**
 
-![readme.jpg](./.github/readme.jpg)
+![js-link.png](./.github/js-link.png)
 
-2. **运行命令**
+1. **运行命令**
 
 ```shell
 npx @zd~/iconfont-cli@latest
