@@ -1,6 +1,6 @@
 # @zd~/iconfont-cli
 
-一个基于[iconfont](https://www.iconfont.cn/)自动生成react/vue组件的cli, 不依赖字体, 多种实现方式, 支持 tarojs/uni-app。
+一个基于 [Iconfont](https://www.iconfont.cn/) 自动生成 React/Vue 组件的 CLI 工具，免除字体依赖，提供多种实现方式，支持 TaroJS 和 UniApp。
 
 ## 优势对比
 

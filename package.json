@@ -1,7 +1,7 @@
 {
   "name": "@zd~/iconfont-cli",
   "version": "0.0.18",
-  "description": "一个基于 iconfont 自动生成react/vue组件的cli, 不依赖字体, 多种实现方式, 支持 tarojs/uni-app",
+  "description": "一个基于 Iconfont 自动生成 React/Vue 组件的 CLI 工具，免除字体依赖，提供多种实现方式，支持 TaroJS 和 UniApp。",
   "author": "zhuddan",
   "license": "ISC",
   "homepage": "https://github.com/zhuddan/iconfont-cli#readme",
