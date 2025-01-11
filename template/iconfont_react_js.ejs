@@ -27,28 +27,44 @@ export function Iconfont({
   className,
   ...rest
 }) {
+<%_ if (achieve === "mask") { _%>
   const mask = useMemo(() => {
     return `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(data[name])}")`
   }, [name])
+<%_ }else{ _%>
+  const backgroundImage = useMemo(() => {
+    const svgData = encodeURIComponent(data[name].replace('currentColor', color))
+    return `url("data:image/svg+xml;charset=utf-8,${svgData}")`
+  }, [name, color])
+<%_ } _%>
 
   const innerStyle = useMemo(() => {
     const _size = size ? `${size}px` : '1em'
     /** @type {React.CSSProperties} */
     const styles = {
       ...style,
+<%_ if (achieve === "mask") { _%>
+      'width': _size,
+      'height': _size,
+      'display': 'inline-block',
       'maskImage': mask,
       '-webkit-mask-image': mask,
       'maskSize': _size,
       '-webkit-mask-size': _size,
-      'width': _size,
-      'height': _size,
       'backgroundColor': color,
       'maskRepeat': 'no-repeat',
       '-webkit-mask-repeat': 'no-repeat',
-      'display': 'inline-block',
+  <%_ }else{ _%>
+      width: _size,
+      height: _size,
+      display: 'inline-block',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: _size,
+      backgroundImage,
+  <%_ } _%>
     }
     return styles
-  }, [color, mask, size, style])
+  }, [<%_ if (achieve === "mask") { _%>mask, color, size, style<%_ }else{ _%>backgroundImage, size, style<%_ } _%>])
 
   return (
     <div

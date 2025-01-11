@@ -1,6 +1,6 @@
 # @zd~/iconfont-cli
 
-一个基于[iconfont](https://www.iconfont.cn/)自动生成react/vue组件的cli, 不依赖字体, 多端支持(tarojs/uni-app)
+一个基于[iconfont](https://www.iconfont.cn/)自动生成react/vue组件的cli, 不依赖字体, 多种实现方式, 支持 tarojs/uni-app。
 
 ## 优势对比
 
@@ -38,6 +38,7 @@ npx @zd~/iconfont-cli@latest
 - 输入 Symbol 字体图标的在线 JS 链接
 - 选择一个框架（React/Vue）
 - 是否使用ts (yes / no)
+- 请选择图标实现方式 (mask/background)
 - 设置 Iconfont 组件路径文件夹（默认 src/components/iconfont）
 - 是否具名导出每一个图标组件 (仅 React 可用)
 - 设置具名导出组件的组件前缀（仅 React 可用）
@@ -49,6 +50,7 @@ npx @zd~/iconfont-cli@latest
   "jsLink": "//at.alicdn.com/t/c/你的链接.js", // Symbol字体图标的在线js链接
   "framework": "react", // 框架
   "useTs": true, // 是否使用 ts
+  "achieve": "mask", // 实现方式 mask 遮罩 或 background 背景图
   "iconfontPath": "src/components/iconfont", // Iconfont 组件路径文件夹
   "set": true, // 是否具名导出每一个图标组件 (仅 react 可用)
   "iconPrefix": "icon" // 具名导出组件的组件前缀 (仅 react 可用)
@@ -87,7 +89,7 @@ type CommonIconfontProps = Omit<ComponentProps<typeof Iconfont>, 'name'>
  *
  * ![IconLoading](...)
  */
-export function IconLoading(props: CommonIconfontProps) {
+export function IconfontLoading(props: CommonIconfontProps) {
   return <Iconfont name="loading" {...props} />
 }
 ```
@@ -98,7 +100,7 @@ src/components/iconfont/iconfont-types.ts
 /**
  * 图标名称
  */
-export type IconfontTypes = 'loading' | 'check-order' | 'trade' | 'connect' | 'setup' | 'coupon' | 'order' | 'notice' | 'remark' | 'navigate' | 'user' | 'phone' | 'clock' | 'chat' | 'store' | 'star' | 'star-fill' | 'close' | 'shop' | 'location' | 'down' | 'left' | 'plus' | 'right' | 'search' | 'up'
+export type IconfontTypes = 'loading' // ....
 ```
 
 src/components/iconfont/iconfont.tsx
@@ -127,21 +129,25 @@ export function Iconfont({
   const mask = useMemo(() => {
     return `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(data[name])}")`
   }, [name])
+
   const innerStyle = useMemo(() => {
     const _size = size ? `${size}px` : '1em'
     return {
       ...style,
-      'mask': mask,
-      // eslint-disable-next-line ts/ban-ts-comment
-      // @ts-expect-error
-      '-webkit-mask': mask,
-      'mask-size': _size,
       'width': _size,
       'height': _size,
-      'backgroundColor': color,
       'display': 'inline-block',
+      'maskImage': mask,
+      // eslint-disable-next-line ts/ban-ts-comment
+      // @ts-expect-error
+      '-webkit-mask-image': mask,
+      'mask-size': _size,
+      '-webkit-mask-size': _size,
+      'backgroundColor': color,
+      'maskRepeat': 'no-repeat',
+      '-webkit-mask-repeat': 'no-repeat',
     } satisfies CSSProperties
-  }, [color, mask, size, style])
+  }, [mask, color, size, style])
   return (
     <div
       className={clsx('iconfont', className)}
@@ -174,15 +180,26 @@ npx @zd~/iconfont-cli@latest
 }
 ```
 
-> [!NOTE]
-> 组件文件（React 为 iconfont.jsx 或 iconfont.tsx，Vue 为 iconfont.vue）默认只创建一次。
->
-> 目的在于支持用户自定义修改组件细节。例如，在小程序环境中可将 size 单位调整为 rpx，或修改组件的默认颜色。
->
-> 如果需要覆盖文件重新创建，请使用以下命令：
+## 注意
 
-```shell
-npx @zd~/iconfont-cli@latest --force
-```
+- 组件文件（React：`iconfont.jsx` 或 `iconfont.tsx`，Vue：`iconfont.vue`）默认只会创建一次。
+
+  这样设计的目的是支持用户自定义修改组件细节。例如，在小程序环境中，用户可以将 `size` 单位调整为 `rpx`，或修改组件的默认颜色。
+
+  如果需要覆盖文件并重新创建，请使用以下命令：
+
+  ```shell
+  npx @zd~/iconfont-cli@latest --force
+  ```
+
+- 实现方式
+
+  - [MDN/mask](https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask)
+
+    `mask` 属性最早由 WebKit 于 2012 年引入，当时以 `-webkit-` 前缀存在。随后，在 2014 年，它被纳入了 CSS Masking Module Level 1 规范草案中。自 2023 年 12 月起，最新的设备和浏览器版本开始支持这一功能。然而，较旧的设备或浏览器可能无法使用此功能。值得注意的是，在微信小程序的 非 Skyline 渲染模式 下，mask 属性可以正常使用，而在 Skyline 渲染模式 下只能使用 background 属性。
+
+  - [MDN/background](https://developer.mozilla.org/zh-CN/docs/Web/CSS/background)
+
+    相比于 `mask` 属性，`background` 属性的兼容性要更好。
 
 感谢您的使用。如果你有任何问题或建议，请随时联系我。

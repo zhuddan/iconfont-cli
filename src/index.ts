@@ -1,7 +1,7 @@
 // #!/usr/bin/env node
 import fs from 'node:fs'
 import path from 'node:path'
-import process from 'node:process'
+import process, { config } from 'node:process'
 import * as p from '@clack/prompts'
 import * as cheerio from 'cheerio'
 import * as ejs from 'ejs'
@@ -19,7 +19,8 @@ interface Config {
   framework: 'vue' | 'react'
   useTs: boolean
   iconfontPath: string
-  set: boolean
+  achieve: 'mask' | 'bg'
+  set?: boolean
   iconPrefix?: string
 }
 
@@ -51,29 +52,20 @@ async function init() {
             message: '是否使用ts',
             initialValue: true,
           }),
+          achieve: () => p.select({
+            message: '请选择图标实现方式',
+            options: [
+              { value: 'mask', label: 'mask 遮罩(新特性)' },
+              { value: 'bg', label: 'background-image 背景图(兼容性好)' },
+            ],
+          }),
           iconfontPath: () => p.text({
             message: '设置 Iconfont 组件路径文件夹',
             initialValue: 'src/components/iconfont',
             defaultValue: 'src/components/iconfont',
             placeholder: 'src/components/iconfont',
           }),
-          set: ({ results }) => {
-            if (results.framework === 'vue')
-              return
-            return p.confirm({
-              message: '是否具名导出每一个图标组件',
-              initialValue: true,
-            })
-          },
-          iconPrefix: ({ results }) => {
-            if (results.framework === 'vue')
-              return
-            return p.text({
-              message: '设置具名导出组件的组件前缀',
-              initialValue: 'icon',
-              defaultValue: '',
-            })
-          },
+
         },
         {
           onCancel: () => {
@@ -82,9 +74,37 @@ async function init() {
           },
         },
       )
-      fs.writeFileSync(configFilePath, JSON.stringify(config, null, 2))
+
+      const setConfig = config.framework === 'react'
+        ? await p.group(
+          {
+            set: () => {
+              return p.confirm({
+                message: '是否具名导出每一个图标组件',
+                initialValue: true,
+              })
+            },
+            iconPrefix: () => {
+              return p.text({
+                message: '设置具名导出组件的组件前缀',
+                initialValue: 'iconfont',
+                defaultValue: '',
+              })
+            },
+          },
+          {
+            onCancel: () => {
+              p.cancel('Operation cancelled.')
+              process.exit(0)
+            },
+          },
+        )
+        : {}
+      fs.writeFileSync(configFilePath, JSON.stringify(Object.assign(config, setConfig), null, 2))
     }
+
     const _config = JSON.parse(fs.readFileSync(configFilePath).toString()) as Config
+
     await run(_config)
     console.log(c.green('✨✨✨ 操作成功'))
   }
@@ -168,7 +188,7 @@ function updateIconfontType({ config: { useTs, iconfontPath }, types }: Options)
 }
 
 function updateIconfontComponent(
-  { config: { useTs, framework, iconfontPath }, types }: Options,
+  { config: { useTs, framework, iconfontPath, achieve }, types }: Options,
 ) {
   const fileExtension = useTs ? 'ts' : 'js'
   const ext = framework === 'react'
@@ -212,6 +232,7 @@ function updateIconfontComponent(
     fs.readFileSync(path.resolve(__dirname, `../template/${filename}`), 'utf-8'),
     {
       types: typeStr,
+      achieve,
     },
   )
 

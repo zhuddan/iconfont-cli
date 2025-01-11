@@ -18,22 +18,39 @@ const props = defineProps({
   },
 })
 
+<%_ if (achieve === "mask") { _%>
 const mask = computed(() => {
   return `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(data[props.name])}")`
 })
+<%_ }else{ _%>
+const backgroundImage = computed(() => {
+  const svgData = encodeURIComponent(data[props.name].replace('currentColor', props.color))
+  return `url("data:image/svg+xml;charset=utf-8,${svgData}")`
+})
+<%_ } _%>
 
 const innerStyle = computed(() => {
   const _size = props.size ? `${props.size}px` : '1em'
   return {
+<%_ if (achieve === "mask") { _%>
+    'width': _size,
+    'height': _size,
+    'display': 'inline-block',
     'mask-image': mask.value,
     '-webkit-mask-image': mask.value,
     'mask-size': _size,
     '-webkit-mask-size': _size,
     'mask-repeat': 'no-repeat',
     '-webkit-mask-repeat': 'no-repeat',
-    'width': _size,
-    'height': _size,
     'backgroundColor': props.color,
+<%_ }else{ _%>
+    width: _size,
+    height: _size,
+    display: 'inline-block',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: _size,
+    backgroundImage: backgroundImage.value,
+<%_ } _%>
   } satisfies CSSProperties
 })
 </script>
