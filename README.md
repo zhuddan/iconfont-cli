@@ -55,7 +55,7 @@ npx @zd~/iconfont-cli@latest
 }
 ```
 
-1. **生成组件文件**
+4. **生成组件文件**
 
 工具会在 src/components/iconfont 目录下生成相应的组件文件，并提示操作成功。
 
