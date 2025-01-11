@@ -10,7 +10,7 @@ export default () => (
     },
     format: 'cjs',
     platform: 'node',
-    target: 'node12',
+    target: 'node14',
     minify: 'terser',
     clean: true,
   })
