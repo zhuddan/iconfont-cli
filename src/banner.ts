@@ -1,6 +1,6 @@
 // import type { Options } from 'boxen'
 // import boxen from 'boxen'
-import { bgRed, cyan, gray, red } from 'kolorist'
+import { cyan, gray } from 'kolorist'
 
 import { name, version } from '../package.json'
 
