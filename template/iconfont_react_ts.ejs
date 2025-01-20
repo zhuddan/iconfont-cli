@@ -24,7 +24,7 @@ export function Iconfont({
   }, [name])
 <%_ }else{ _%>
   const backgroundImage = useMemo(() => {
-    const svgData = encodeURIComponent(data[name].replace('currentColor', color))
+    const svgData = encodeURIComponent(data[name].replace(/currentColor/g, color))
     return `url("data:image/svg+xml;charset=utf-8,${svgData}")`
   }, [name, color])
 <%_ } _%>

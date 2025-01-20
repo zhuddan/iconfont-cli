@@ -24,7 +24,7 @@ const mask = computed(() => {
 })
 <%_ }else{ _%>
 const backgroundImage = computed(() => {
-  const svgData = encodeURIComponent(data[props.name].replace('currentColor', props.color))
+  const svgData = encodeURIComponent(data[props.name].replace(/currentColor/g, props.color))
   return `url("data:image/svg+xml;charset=utf-8,${svgData}")`
 })
 <%_ } _%>
