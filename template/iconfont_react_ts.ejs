@@ -34,13 +34,8 @@ export function Iconfont({
     return {
       ...style,
 <%_ if (achieve === "mask") { _%>
-      'width': _size,
-      'height': _size,
-      // eslint-disable-next-line ts/ban-ts-comment
-      // @ts-expect-error
-      'mask-size': _size,
-      '-webkit-mask-size': _size,
-      'backgroundColor': color,
+      '--icon-size': _size,
+      '--icon-color': color,
   <%_ }else{ _%>
       width: _size,
       height: _size,

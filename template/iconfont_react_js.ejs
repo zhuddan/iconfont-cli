@@ -48,11 +48,9 @@ export function Iconfont({
     const styles = {
       ...style,
 <%_ if (achieve === "mask") { _%>
-      'width': _size,
-      'height': _size,
-      'maskSize': _size,
-      '-webkit-mask-size': _size,
-      'backgroundColor': color,
+      ...style,
+      '--icon-size': _size,
+      '--icon-color': color,
   <%_ }else{ _%>
       width: _size,
       height: _size,
