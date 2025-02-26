@@ -65,7 +65,6 @@ async function init() {
             defaultValue: 'src/components/iconfont',
             placeholder: 'src/components/iconfont',
           }),
-
         },
         {
           onCancel: () => {
@@ -151,23 +150,23 @@ async function run(config: Config) {
   updateIconfontSet(options)
 }
 
-function updateIconfontData({ data, config: { iconfontPath, useTs } }: Options) {
-  const filename = `iconfont-data`
+function updateIconfontData({ data, config: { iconfontPath, useTs, achieve } }: Options) {
+  const filename = achieve === 'bg' ? `iconfont-data` : 'iconfont-css'
+
+  const renderData = achieve === 'bg'
+    ? decodeURIComponent(JSON.stringify(data, null, 2))
+    : `${Object.entries(data).map(([name, value]) => {
+      return `.iconfont.${name} { \n  mask-image: url('data:image/svg+xml;charset=utf-8,${encodeURIComponent(value)}');\n  -webkit-mask-image: url('data:image/svg+xml;charset=utf-8,${encodeURIComponent(value)}');\n}`
+    }).join('\n\n')}`
+
   const context = ejs.render(
     fs.readFileSync(path.resolve(__dirname, `../template/${filename}.ejs`), 'utf-8'),
     {
-      data: decodeURIComponent(JSON.stringify(data, null, 2)),
+      data: renderData,
     },
   )
-  const _ = `${filename}${useTs ? '.ts' : '.js'}`
-
-  fs.writeFileSync(
-    path.resolve(
-      iconfontPath,
-      _,
-    ),
-    context,
-  )
+  const _ = `${filename}${achieve === 'bg' ? useTs ? '.ts' : '.js' : '.css'}`
+  fs.writeFileSync(path.resolve(iconfontPath, _), context)
 }
 
 function updateIconfontType({ config: { useTs, iconfontPath }, types }: Options) {

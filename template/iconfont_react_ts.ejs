@@ -2,7 +2,11 @@ import type { CSSProperties, HTMLAttributes } from 'react'
 import type { IconfontTypes } from './iconfont-types'
 import clsx from 'clsx'
 import { useMemo } from 'react'
+<%_ if (achieve === "mask") { _%>
+import './iconfont.css'
+<%_ }else{ _%>
 import data from './iconfont-data'
+<%_ } _%>
 
 interface IconfontProps extends HTMLAttributes<HTMLDivElement> {
   size?: number
@@ -18,11 +22,7 @@ export function Iconfont({
   className,
   ...rest
 }: IconfontProps) {
-<%_ if (achieve === "mask") { _%>
-  const mask = useMemo(() => {
-    return `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(data[name])}")`
-  }, [name])
-<%_ }else{ _%>
+<%_ if (achieve === "bg") { _%>
   const backgroundImage = useMemo(() => {
     const svgData = encodeURIComponent(data[name].replace(/currentColor/g, color))
     return `url("data:image/svg+xml;charset=utf-8,${svgData}")`
@@ -36,16 +36,11 @@ export function Iconfont({
 <%_ if (achieve === "mask") { _%>
       'width': _size,
       'height': _size,
-      'display': 'inline-block',
-      'maskImage': mask,
       // eslint-disable-next-line ts/ban-ts-comment
       // @ts-expect-error
-      '-webkit-mask-image': mask,
       'mask-size': _size,
       '-webkit-mask-size': _size,
       'backgroundColor': color,
-      'maskRepeat': 'no-repeat',
-      '-webkit-mask-repeat': 'no-repeat',
   <%_ }else{ _%>
       width: _size,
       height: _size,
@@ -55,10 +50,10 @@ export function Iconfont({
       backgroundImage,
   <%_ } _%>
     } satisfies CSSProperties
-  }, [<%_ if (achieve === "mask") { _%>mask, color, size, style<%_ }else{ _%>backgroundImage, size, style<%_ } _%>])
+  }, [<%_ if (achieve === "mask") { _%>color, size, style<%_ }else{ _%>backgroundImage, size, style<%_ } _%>])
   return (
     <div
-      className={clsx('iconfont', className)}
+      className={clsx('iconfont', <%_ if (achieve === "mask") { _%> name,<%_ }_%> className)}
       style={innerStyle}
       {...rest}
     >
